@@ -1,0 +1,47 @@
+version: '2'
+services:
+  zookeeper:
+    image: quay.io/debezium/zookeeper:latest
+  kafka:
+    image: quay.io/debezium/kafka:latest
+    ports:
+     - 9092:9092
+    links:
+     - zookeeper
+    environment:
+     - ZOOKEEPER_CONNECT=zookeeper:2181
+  postgres:
+    build: ./postgres
+    ports:
+     - 5432:5432
+    environment:
+     - POSTGRES_USER=postgres
+     - POSTGRES_PASSWORD=postgres
+     - POSTGRES_DB=database
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+  connect:
+    image: debezium/connect-jdbc-es:latest
+    build:
+      context: debezium-jdbc-es
+      args:
+        DEBEZIUM_VERSION: latest
+    ports:
+     - 8083:8083
+     - 5005:5005
+    links:
+     - kafka:kafka
+     - postgres:postgres
+    environment:
+     - BOOTSTRAP_SERVERS=kafka:9092
+     - GROUP_ID=1
+     - CONFIG_STORAGE_TOPIC=_connect_configs
+     - OFFSET_STORAGE_TOPIC=_connect_offsets
+     - STATUS_STORAGE_TOPIC=_source_connect_statuses
+     - CONNECT_JDBC_URL=jdbc:postgresql://postgres:5432/database
+  python-app:
+    build: ./src
