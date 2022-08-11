@@ -1,6 +1,7 @@
 numpy
 pandas
 scikit-learn
-requests
+xgboost
 bentoml
+requests
 confluent-kafka
