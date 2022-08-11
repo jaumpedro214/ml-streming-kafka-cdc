@@ -20,9 +20,7 @@ CONNECTORS = [
             
             # Defining SMTs
             "transforms": "unwrap",
-            
             # Extacts the new record state from the record
-            # does not captures deletes
             "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
         }
     },
@@ -54,7 +52,7 @@ sleep(50)
 # Try write the connectors to the debezium server
 for connector in CONNECTORS:
     response = requests.post(
-        "http://localhost:8083/connectors",
+        "http://connect:8083/connectors",
         headers={
             "Content-Type": "application/json"
         },
