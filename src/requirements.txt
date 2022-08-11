@@ -3,3 +3,4 @@ pandas
 scikit-learn
 requests
 bentoml
+confluent-kafka
