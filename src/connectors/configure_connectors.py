@@ -3,7 +3,7 @@ import requests
 
 CONNECTORS = [
     {
-        "name": "cdc_pg_car_connector",
+        "name": "source_pg_car_connector",
         "config": {
             "connector.class":
                 "io.debezium.connector.postgresql.PostgresConnector",
@@ -17,23 +17,28 @@ CONNECTORS = [
 
             "database.server.name": "car_database",
             "table.include.list": "public.car_data",
+            
+            # Defining SMTs
+            "transforms": "unwrap",
+            
+            # Extacts the new record state from the record
+            # does not captures deletes
+            "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
         }
     },
     
     {
-        "name": "sink-pg-connector2",
+        "name": "sink_pg_car_connector",
         "config": {
+            "topics": "car_data_predicted",
+            
             "connector.class":
                 "io.confluent.connect.jdbc.JdbcSinkConnector",
-                "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
             "tasks.max": "1",
-            "topics": "car_data",
+            
             "connection.url": "jdbc:postgresql://postgres:5432/database",
             "connection.user": "postgres",
             "connection.password": "postgres",
-
-            "transforms": "unwrap",
-            "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
 
             "auto.create": "true",
             "insert.mode": "upsert",
@@ -43,13 +48,13 @@ CONNECTORS = [
     }
 ]
 
-# wait for the server to be ready
+# Wait for the debezium server to be ready
 sleep(50)
-
+    
 # Try write the connectors to the debezium server
 for connector in CONNECTORS:
     response = requests.post(
-        "http://connect:8083/connectors",
+        "http://localhost:8083/connectors",
         headers={
             "Content-Type": "application/json"
         },
