@@ -3,7 +3,7 @@ import numpy as np
 
 from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import FunctionTransformer, MinMaxScaler, StandardScaler, OneHotEncoder
+from sklearn.preprocessing import FunctionTransformer, StandardScaler, OneHotEncoder
 from sklearn.pipeline import Pipeline
 from xgboost import XGBRegressor
 
@@ -13,8 +13,6 @@ import bentoml
 
 from datetime import datetime
 import os
-
-CATEGORICAL_VARS = ['model', 'transmission', 'fuelType']
 
 # Replace the categories with their corresponding frequencies
 # previously calculated
@@ -69,7 +67,6 @@ if __name__ == "__main__":
             (
                 "transmission",
                 OneHotEncoder(
-                    drop="first",
                     handle_unknown="ignore",
                     sparse=False
                 ),
@@ -95,7 +92,6 @@ if __name__ == "__main__":
                         (
                             "OneHotEncoder",
                             OneHotEncoder(
-                                drop="first",
                                 handle_unknown="ignore",
                                 sparse=False
                             ),
@@ -188,7 +184,7 @@ if __name__ == "__main__":
     # MAE
     mae = mean_absolute_error(ford_df_test["price"], y_pred)
     print(f"[{datetime.now()}] MAE on the test data: {mae}")
-    
+
     # Save the model to a bento service
     model_id = bentoml.sklearn.save_model(
         "ford_price_predictor",

@@ -2,8 +2,12 @@ import bentoml
 from bentoml.io import JSON
 import pandas as pd
 
-POSSIBLE_MODELS = {' Ka+', ' Grand C-MAX', ' Kuga', 'Other', ' C-MAX', ' Focus', ' Tourneo Custom', ' Escort', ' EcoSport', ' Edge', ' S-MAX',
-                   ' Grand Tourneo Connect', ' Fiesta', ' Fusion', ' Mustang', ' B-MAX', ' KA', ' Streetka', ' Ranger', 'Focus', ' Tourneo Connect', ' Galaxy', ' Mondeo', ' Puma'}
+# This list was previous extracted from the data set
+POSSIBLE_MODELS = {' Ka+', ' Grand C-MAX', ' Kuga', 'Other', ' C-MAX', ' Focus', 
+                   ' Tourneo Custom', ' Escort', ' EcoSport', ' Edge', ' S-MAX',
+                   ' Grand Tourneo Connect', ' Fiesta', ' Fusion', ' Mustang', 
+                   ' B-MAX', ' KA', ' Streetka', ' Ranger', 'Focus', ' Tourneo Connect', 
+                   ' Galaxy', ' Mondeo', ' Puma'}
 
 # Loading the runner
 ford_price_runner = bentoml.sklearn.get(

@@ -55,4 +55,8 @@ services:
       && tail -f /dev/null"
     volumes:
       - ./src/app:/src/app/
+  bento:
+    image: ford_price_predictor:1.0.0
+    ports:
+      - 3000:3000
   
