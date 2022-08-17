@@ -52,7 +52,7 @@ services:
     build: ./src
     command: > 
       bash -c "python configure_connectors.py
-      && tail -f /dev/null"
+      && python ./app/price_predictor.py"
     volumes:
       - ./src/app:/src/app/
   bento:
